@@ -1,32 +1,37 @@
 import { Component } from "react";
-
 import MarvelService from "../../services/MarvelService.js";
 
 import './randomChar.scss';
-
 import mjolnir from '../../resources/img/mjolnir.png';
 
-
-const marvelService = new MarvelService()
 
 class RandomChar extends Component {
 	constructor(props) {
 		super(props)
-		this.onChangeChar()
+		this.updateChar()
 	}
 
 	state = {
 		char: {}
 	}
 
-	onChangeChar = async () => {
-		const id = Math.round(Math.random() * (1011400 - 1011000) + 1011000)
-		const char = await marvelService.getCharacter(id)
+	marvelService = new MarvelService()
+
+	onCharLoaded = (char) => {
 		this.setState({char})
+	}
+
+	updateChar = () => {
+		const id = Math.round(Math.random() * (1011400 - 1011000) + 1011000)
+		this.marvelService
+			.getCharacter(id)
+			.then(this.onCharLoaded)
+
 	}
 
 	render() {
 		const {name, description, thumbnail, homepage, wiki} = this.state.char
+		const descriptionPlaceholder = description ? description : 'This character doesn\'t have a description yet.'
 		return (
 			<div className="randomchar">
 				<div className="randomchar__block">
@@ -34,7 +39,7 @@ class RandomChar extends Component {
 					<div className="randomchar__info">
 						<p className="randomchar__name">{name}</p>
 						<p className="randomchar__descr">
-							{description}
+							{descriptionPlaceholder}
 						</p>
 						<div className="randomchar__btns">
 							<a href={homepage} className="button button__main">
@@ -54,7 +59,7 @@ class RandomChar extends Component {
 					<p className="randomchar__title">
 						Or choose another one
 					</p>
-					<button className="button button__main" onClick={this.onChangeChar}>
+					<button className="button button__main" onClick={this.updateChar}>
 						<div className="inner">try it</div>
 					</button>
 					<img src={mjolnir} alt="mjolnir" className="randomchar__decoration"/>
