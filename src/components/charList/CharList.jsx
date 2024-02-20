@@ -1,4 +1,4 @@
-import { Component } from "react";
+import React, { Component } from "react";
 
 import MarvelService from "../../services/MarvelService.js";
 import Spinner from "../spinner/Spinner.jsx";
@@ -63,8 +63,23 @@ class CharList extends Component {
 		})
 	}
 
+	charRefs = []
+
+	setCharRefs = ref => {
+		this.charRefs.push(ref)
+		console.log(ref)
+	}
+
+	onFocusChar = (i) => {
+		this.charRefs.forEach(item => {
+			item.classList.remove('char__item_selected')
+			this.charRefs[i].classList.add('char__item_selected')
+			this.charRefs[i].focus()
+		})
+	}
+
 	renderItems(charList) {
-		const items = charList.map(({id, name, thumbnail}) => {
+		const items = charList.map(({id, name, thumbnail}, i) => {
 			let imgStyle = {'objectFit': 'cover'}
 			if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
 				imgStyle = {'objectFit': 'contain'}
@@ -74,7 +89,18 @@ class CharList extends Component {
 				<li
 					className="char__item"
 					key={id}
-					onClick={() => this.props.onCharSelected(id)}
+					ref={this.setCharRefs}
+					tabIndex={0}
+					onClick={() => {
+						this.props.onCharSelected(id)
+						this.onFocusChar(i)
+					}}
+					onKeyDown={(e) => {
+						if (e.key === ' ' || e.key === 'Enter') {
+							this.onFocusChar(i)
+							this.props.onCharSelected(id)
+						}
+					}}
 				>
 					<img src={thumbnail} alt={name} style={imgStyle}/>
 					<div className="char__name">{name}</div>
