@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MarvelService from "../../services/MarvelService.js";
 import Spinner from "../spinner/Spinner.jsx";
@@ -74,18 +74,14 @@ const CharList = ({onCharSelected}) => {
 		}))
 	}
 
-	const charRefs = []
-
-	const setCharRefs = ref => {
-		charRefs.push(ref)
-	}
+	const charRefs = useRef([])
 
 	const onFocusChar = (i) => {
-		charRefs.forEach(item => {
+		charRefs.current.forEach(item => {
 			item.classList.remove('char__item_selected')
-			charRefs[i].classList.add('char__item_selected')
-			charRefs[i].focus()
 		})
+		charRefs.current[i].classList.add('char__item_selected')
+		charRefs.current[i].focus()
 	}
 
 	const renderItems = (charList) => {
@@ -99,7 +95,7 @@ const CharList = ({onCharSelected}) => {
 				<li
 					className="char__item"
 					key={id}
-					ref={setCharRefs}
+					ref={el => charRefs.current[i] = el}
 					tabIndex={0}
 					onClick={() => {
 						onCharSelected(id)
