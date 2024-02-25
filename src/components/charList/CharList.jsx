@@ -1,53 +1,28 @@
 import { useEffect, useRef, useState } from "react";
 
-import MarvelService from "../../services/MarvelService.js";
+import useMarvelService from "../../services/MarvelService.js";
 import Spinner from "../spinner/Spinner.jsx";
 import Error from "../error/Error.jsx";
 
 import './charList.scss';
 
 const CharList = ({onCharSelected}) => {
-	const [state, setState] = useState({
-		chars: [],
-		loading: true,
-		error: false,
-		offset: 210,
-		newItemLoading: false,
-		charEnded: false
-	})
+	const {loading, error, getAllCharacters} = useMarvelService()
+	const [chars, setChars] = useState([])
+	const [offset, setOffset] = useState(210)
+	const [newItemLoading, setNewItemLoading] = useState(false)
+	const [charEnded, setCharEnded] = useState(false)
 
 	useEffect(() => {
 		return () => {
-			onRequest()
+			onRequest(offset, true)
 		}
 	}, []);
 
-
-	const marvelService = new MarvelService()
-
-	// componentWillUnmount()
-	// {
-	// 	this.onRequest()
-	// }
-	//
-	// componentDidMount()
-	// {
-	// 	this.onRequest()
-	// }
-
-	const onRequest = (offset) => {
-		onCharListLoading()
-		marvelService
-			.getAllCharacters(offset)
+	const onRequest = (offset, initial) => {
+		initial ? setNewItemLoading(false) : setNewItemLoading(true)
+		getAllCharacters(offset)
 			.then(onCharListLoaded)
-			.catch(onError)
-	}
-
-	const onCharListLoading = () => {
-		setState(state => ({
-			...state,
-			newItemLoading: true
-		}))
 	}
 
 	const onCharListLoaded = (newChars) => {
@@ -56,22 +31,10 @@ const CharList = ({onCharSelected}) => {
 			ended = true
 		}
 
-		setState(state => ({
-			...state,
-			chars: [...state.chars, ...newChars],
-			loading: false,
-			newItemLoading: false,
-			offset: state.offset + 9,
-			charEnded: ended
-		}))
-	}
-
-	const onError = () => {
-		setState(state => ({
-			...state,
-			loading: false,
-			error: true
-		}))
+		setChars(chars => [...chars, ...newChars])
+		setNewItemLoading(false)
+		setOffset(offset => offset + 9)
+		setCharEnded(ended)
 	}
 
 	const charRefs = useRef([])
@@ -122,19 +85,16 @@ const CharList = ({onCharSelected}) => {
 		)
 	}
 
-	const {chars, loading, error, newItemLoading, offset, charEnded} = state
-
 	const items = renderItems(chars)
 
 	const errorMessage = error ? <Error/> : null
-	const spinner = loading ? <Spinner/> : null
-	const content = !(loading || error) ? items : null
+	const spinner = loading && !newItemLoading ? <Spinner/> : null
 
 	return (
 		<div className="char__list">
 			{errorMessage}
 			{spinner}
-			{content}
+			{items}
 			<button
 				className='button button__main button__long'
 				style={{'display': charEnded ? 'none' : 'block'}}
