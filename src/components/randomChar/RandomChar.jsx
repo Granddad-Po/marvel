@@ -4,7 +4,7 @@ import useMarvelService from "../../services/MarvelService.js";
 import './randomChar.scss';
 import mjolnir from '../../resources/img/mjolnir.png';
 import Spinner from "../spinner/Spinner.jsx";
-import Error from "../error/Error.jsx";
+import ErrorMessage from "../error/ErrorMessage.jsx";
 
 
 const RandomChar = () => {
@@ -28,7 +28,7 @@ const RandomChar = () => {
 	}
 
 	const spinner = loading ? <Spinner/> : null
-	const errorMessage = error ? <Error/> : null
+	const errorMessage = error ? <ErrorMessage/> : null
 	const content = !(loading || error) ? <View char={char}/> : null
 
 	return (

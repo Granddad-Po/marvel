@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import useMarvelService from "../../services/MarvelService.js";
-import Error from "../error/Error.jsx";
+import ErrorMessage from "../error/ErrorMessage.jsx";
 import Spinner from "../spinner/Spinner.jsx";
 
 import Skeleton from "../skeleton/Skeleton.jsx";
@@ -34,7 +34,7 @@ const CharInfo = ({charId}) => {
 	}
 
 	const skeleton = !(error || loading || char) ? <Skeleton/> : null
-	const errorMessage = error ? <Error/> : null
+	const errorMessage = error ? <ErrorMessage/> : null
 	const spinner = loading ? <Spinner/> : null
 	const content = !(error || loading || !char) ? <View char={char}/> : null
 

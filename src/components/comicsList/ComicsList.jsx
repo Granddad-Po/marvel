@@ -1,26 +1,34 @@
-import './comicsList.scss';
-import uw from '../../resources/img/UW.png';
-import xMen from '../../resources/img/x-men.png';
-import { useHttp } from "../../hooks/http.hook.jsx";
-import useMarvelService from "../../services/MarvelService.js";
 import { useEffect, useState } from "react";
+import useMarvelService from "../../services/MarvelService.js";
+
+import './comicsList.scss';
+import Spinner from "../spinner/Spinner.jsx";
+import ErrorMessage from "../error/ErrorMessage.jsx";
 
 const ComicsList = () => {
 
 	const [comics, setComics] = useState([])
+    const [offset, setOffset] = useState(1200)
+    const [loadingNewComics, setLoadingNewComics] = useState(false)
 	const {loading, error, getAllComics} = useMarvelService()
 
 	useEffect(() => {
 		return () => {
-			getAllComics()
-				.then(onComicListLoaded)
+            onRequestNewComics(offset, true)
 		}
 	}, []);
 
-	const onComicListLoaded = (comics) => {
-		setComics(comics)
-		console.log(comics)
+	const onComicListLoaded = (newComicsArray) => {
+		setComics(comics => [...comics, ...newComicsArray])
+        setOffset(offset => offset + 8)
+        setLoadingNewComics(false)
 	}
+
+    const onRequestNewComics = (offset, initial) => {
+        initial ? setLoadingNewComics(false) : setLoadingNewComics(true)
+        getAllComics(offset)
+            .then(onComicListLoaded)
+    }
 
 	const renderItems = (comics) => {
 		const items = comics.map(({id, title, thumbnail, price}) => {
@@ -44,10 +52,15 @@ const ComicsList = () => {
 
 	const items = renderItems(comics)
 
+    const spinner = (loading && !loadingNewComics) ? <Spinner/> : null
+    const errorMessage = error ? <ErrorMessage/> : null
+
 	return (
 		<div className="comics__list">
+            {spinner}
+            {errorMessage}
 			{items}
-			<button className="button button__main button__long">
+			<button onClick={() => onRequestNewComics(offset)} className="button button__main button__long" disabled={loadingNewComics}>
 				<div className="inner">load more</div>
 			</button>
 		</div>

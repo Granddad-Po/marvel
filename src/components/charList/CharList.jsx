@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 
 import useMarvelService from "../../services/MarvelService.js";
 import Spinner from "../spinner/Spinner.jsx";
-import Error from "../error/Error.jsx";
+import ErrorMessage from "../error/ErrorMessage.jsx";
 
 import './charList.scss';
 
@@ -87,7 +87,7 @@ const CharList = ({onCharSelected}) => {
 
 	const items = renderItems(chars)
 
-	const errorMessage = error ? <Error/> : null
+	const errorMessage = error ? <ErrorMessage/> : null
 	const spinner = loading && !newItemLoading ? <Spinner/> : null
 
 	return (
