@@ -6,6 +6,8 @@ import CharList from "../charList/CharList.jsx";
 import CharInfo from "../charInfo/CharInfo.jsx";
 
 import decoration from '../../resources/img/vision.png';
+import AppBanner from "../appBanner/AppBanner.jsx";
+import ComicsList from "../comicsList/ComicsList.jsx";
 
 const App = () => {
 
@@ -19,12 +21,14 @@ const App = () => {
 		<div className="app">
 			<AppHeader/>
 			<main>
-				<RandomChar/>
-				<div className="char__content">
-					<CharList onCharSelected={onCharSelected}/>
-					<CharInfo charId={selectedChar}/>
-				</div>
-				<img className="bg-decoration" src={decoration} alt="vision"/>
+				{/*<RandomChar/>*/}
+				{/*<div className="char__content">*/}
+				{/*	<CharList onCharSelected={onCharSelected}/>*/}
+				{/*	<CharInfo charId={selectedChar}/>*/}
+				{/*</div>*/}
+				{/*<img className="bg-decoration" src={decoration} alt="vision"/>*/}
+				<AppBanner/>
+				<ComicsList/>
 			</main>
 		</div>
 	)
