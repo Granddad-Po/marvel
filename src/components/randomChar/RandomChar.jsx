@@ -56,16 +56,15 @@ const RandomChar = () => {
 const View = ({char}) => {
 	const {name, description, thumbnail, homepage, wiki} = char
 	const imgSrc = 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg'
-	const heroImg = thumbnail === imgSrc ? {objectFit: 'contain'} : null
-	const descriptionPlaceholder = description ? description : 'This character doesn\'t have a description yet.'
+	const styleImg = thumbnail === imgSrc ? {objectFit: 'contain'} : null
 
 	return (
 		<div className="randomchar__block">
-			<img src={thumbnail} alt="Random character" className="randomchar__img" style={heroImg}/>
+			<img src={thumbnail} alt="Random character" className="randomchar__img" style={styleImg}/>
 			<div className="randomchar__info">
 				<p className="randomchar__name">{name}</p>
 				<p className="randomchar__descr">
-					{descriptionPlaceholder}
+					{description}
 				</p>
 				<div className="randomchar__btns">
 					<a href={homepage} className="button button__main">

@@ -32,7 +32,7 @@ const useMarvelService = () => {
 		return {
 			id: char.id,
 			name: char.name,
-			description: char.description,
+			description: char.description || 'This character doesn\'t have a description yet',
 			thumbnail: `${char.thumbnail.path}.${char.thumbnail.extension}`,
 			homepage: char.urls[0].url,
 			wiki: char.urls[1].url,
@@ -44,9 +44,10 @@ const useMarvelService = () => {
 		return {
 			id: comic.id,
 			title: comic.title,
-			description: comic.description,
-			pageCount: comic.pageCount,
+			description: comic.description || 'This comic doesn\'t have a description yet',
+			pageCount: `${comic.pageCount} pages`,
 			thumbnail: `${comic.thumbnail.path}.${comic.thumbnail.extension}`,
+			language: comic.textObjects[0]?.language || 'en-US',
 			price: comic.prices[0].price,
 		}
 	}
