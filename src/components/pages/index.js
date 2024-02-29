@@ -1,4 +1,5 @@
 import MainPage from "./MainPage.jsx";
 import ComicsPage from "./ComicsPage.jsx";
+import SingleComicPage from "./SingleComicPage.jsx";
 
-export {MainPage, ComicsPage}
+export {MainPage, ComicsPage, SingleComicPage}

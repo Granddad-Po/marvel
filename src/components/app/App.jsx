@@ -1,22 +1,21 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import AppHeader from "../appHeader/AppHeader.jsx";
-import { MainPage, ComicsPage } from '../pages'
+import Layout from "../appHeader/Layout.jsx";
+import { MainPage, ComicsPage, SingleComicPage } from '../pages'
+import Page404 from "../pages/404.jsx";
 
 const App = () => {
 
-
 	return (
 		<Router>
-			<div className="app">
-				<AppHeader/>
-				<main>
-					<Routes>
-						<Route path="/" element={<MainPage/>}/>
-						<Route path="/comics" element={<ComicsPage/>}/>
-					</Routes>
-				</main>
-			</div>
+			<Routes>
+				<Route path="/" element={<Layout/>}>
+					<Route index element={<MainPage/>}/>
+					<Route path="comics" element={<ComicsPage/>}/>
+					<Route path="comics/:comicId" element={<SingleComicPage/>}/>
+					<Route path="*" element={<Page404/>}/>
+				</Route>
+			</Routes>
 		</Router>
 	)
 }
