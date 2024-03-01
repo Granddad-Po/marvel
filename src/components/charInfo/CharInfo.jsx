@@ -6,6 +6,7 @@ import Spinner from "../spinner/Spinner.jsx";
 
 import Skeleton from "../skeleton/Skeleton.jsx";
 import './charInfo.scss';
+import { Link } from "react-router-dom";
 
 const CharInfo = ({charId}) => {
 	const {loading, error, getCharacter, clearError} = useMarvelService()
@@ -51,7 +52,6 @@ const CharInfo = ({charId}) => {
 const View = ({char}) => {
 	const {name, description, thumbnail, homepage, wiki, comics} = char
 
-	const descriptionPlaceholder = description ? description : 'This character doesn\'t have a description yet.'
 	let imgStyle = {'objectFit': 'cover'}
 	if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
 		imgStyle = {'objectFit': 'contain'}
@@ -64,7 +64,9 @@ const View = ({char}) => {
 		comicItems = comics.slice(0, 10).map((item, i) => {
 			return (
 				<li key={i} className="char__comics-item">
-					{item.name}
+					<Link to={`comics/${item.resourceURI.match(/\/(\d+)$/)[1]}`}>
+						{item.name}
+					</Link>
 				</li>
 			)
 		})
@@ -87,7 +89,7 @@ const View = ({char}) => {
 				</div>
 			</div>
 			<div className="char__descr">
-				{descriptionPlaceholder}
+				{description}
 			</div>
 			<div className="char__comics">Comics:</div>
 			<ul className="char__comics-list">
