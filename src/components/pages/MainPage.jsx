@@ -5,6 +5,7 @@ import CharList from "../charList/CharList.jsx";
 import CharInfo from "../charInfo/CharInfo.jsx";
 
 import decoration from "../../resources/img/vision.png";
+import SearchChar from "../searchChar/SearchChar.jsx";
 
 const MainPage = () => {
 
@@ -20,6 +21,7 @@ const MainPage = () => {
 			<div className="char__content">
 				<CharList onCharSelected={onCharSelected}/>
 				<CharInfo charId={selectedChar}/>
+				<SearchChar/>
 			</div>
 			<img className="bg-decoration" src={decoration} alt="vision"/>
 		</>

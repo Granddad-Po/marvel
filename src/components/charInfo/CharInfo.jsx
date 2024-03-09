@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-
+import { Link } from "react-router-dom";
 import useMarvelService from "../../services/MarvelService.js";
+
 import ErrorMessage from "../error/ErrorMessage.jsx";
 import Spinner from "../spinner/Spinner.jsx";
-
 import Skeleton from "../skeleton/Skeleton.jsx";
+
 import './charInfo.scss';
-import { Link } from "react-router-dom";
 
 const CharInfo = ({charId}) => {
 	const {loading, error, getCharacter, clearError} = useMarvelService()

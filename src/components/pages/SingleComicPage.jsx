@@ -29,13 +29,13 @@ const SingleComicPage = () => {
 		setComic(data)
 	}
 
-	const spinner = loading ? <Spinner/> : null
-	const errorMessage = error ? <ErrorMessage/> : null
-	const content = !error && !loading && comic ? <View comic={comic}/> : null
+	const spinner = loading ? <Spinner /> : null
+	const errorMessage = error ? <ErrorMessage /> : null
+	const content = !error && !loading && comic ? <View comic={comic} /> : null
 
 	return (
 		<>
-			<AppBanner/>
+			<AppBanner />
 			{errorMessage}
 			{spinner}
 			{content}
@@ -48,7 +48,7 @@ const View = ({comic}) => {
 
 	return (
 		<div className="single-comic">
-			<img src={thumbnail} alt={title} className="single-comic__img"/>
+			<img src={thumbnail} alt={title} className="single-comic__img" />
 			<div className="single-comic__info">
 				<h2 className="single-comic__name">{title}</h2>
 				<p className="single-comic__descr">{description}</p>
