@@ -6,6 +6,7 @@ import CharInfo from "../charInfo/CharInfo.jsx";
 
 import decoration from "../../resources/img/vision.png";
 import SearchChar from "../searchChar/SearchChar.jsx";
+import { Helmet } from "react-helmet";
 
 const MainPage = () => {
 
@@ -17,6 +18,13 @@ const MainPage = () => {
 
 	return (
 		<>
+			<Helmet>
+				<meta
+					name="description"
+					content="Marvel information portal"
+				/>
+				<title>Marvel Information</title>
+			</Helmet>
 			<RandomChar/>
 			<div className="char__content">
 				<CharList onCharSelected={onCharSelected}/>
