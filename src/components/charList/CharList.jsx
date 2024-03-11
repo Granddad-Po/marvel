@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import useMarvelService from "../../services/MarvelService.js";
 import Spinner from "../spinner/Spinner.jsx";
@@ -105,9 +105,13 @@ const CharList = ({onCharSelected}) => {
 		)
 	}
 
+	const elements = useMemo(() => {
+		return setContent(process, () => renderItems(chars), newItemLoading)
+	}, [process])
+
 	return (
 		<div className="char__list">
-			{setContent(process, () => renderItems(chars), newItemLoading)}
+			{elements}
 			<button
 				className='button button__main button__long'
 				style={{'display': charEnded ? 'none' : 'block'}}
