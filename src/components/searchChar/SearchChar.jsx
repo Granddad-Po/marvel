@@ -8,13 +8,35 @@ import ErrorMessage from "../error/ErrorMessage.jsx";
 
 import './searchChar.scss'
 
-const SearchChar = () => {
-	const {loading, error, getCharacterByName, clearError} = useMarvelService()
-	const [char, setChar] = useState(null)
-
-	const onCharLoaded = (char) => {
-		setChar(char)
+const setContent = (process, data) => {
+	switch (process) {
+		case 'waiting':
+			return <></>
+		case 'loading':
+			return null
+		case 'not-found':
+			return <div className="error">The character was not found. Check the name and try again</div>
+		case 'confirmed':
+			return (
+				<div className="search__wrapper">
+					<div className="success">
+						{`There is! Visit ${data[0].name} page?`}
+					</div>
+					<Link to={`character/${data[0].id}`} className="button button__secondary">
+						<div className="inner">To page</div>
+					</Link>
+				</div>
+			)
+		case 'error':
+			return <ErrorMessage />
+		default:
+			throw Error('Unexpected process state')
 	}
+}
+
+const SearchChar = () => {
+	const {process, setProcess, getCharacterByName, clearError} = useMarvelService()
+	const [char, setChar] = useState(null)
 
 	const updateChar = (charName) => {
 		clearError()
@@ -23,19 +45,15 @@ const SearchChar = () => {
 			.then(onCharLoaded)
 	}
 
-	const errorMessage = error ? <ErrorMessage /> : null
-	const result = !char ? null : char.length > 0
-		?
-		<div className="search__wrapper">
-			<div className="success">
-				{`There is! Visit ${char[0].name} page?`}
-			</div>
-			<Link to={`character/${char[0].id}`} className="button button__secondary">
-				<div className="inner">To page</div>
-			</Link>
-		</div>
-		:
-		<div className="error">The character was not found. Check the name and try again</div>
+	const onCharLoaded = (char) => {
+		if (char.length > 0) {
+			setChar(char)
+			setProcess('confirmed')
+		} else {
+			setChar(char)
+			setProcess('not-found')
+		}
+	}
 
 	return (
 		<div className="search">
@@ -54,7 +72,7 @@ const SearchChar = () => {
 						<Field name="charName" type="text" placeholder="Enter name" />
 						<button
 							className='button button__main'
-							disabled={loading}
+							disabled={process === 'loading'}
 						>
 							<div className="inner">Find</div>
 						</button>
@@ -62,8 +80,7 @@ const SearchChar = () => {
 					<FormikErrorMessage name="charName" className="error" style={{marginTop: '25px'}} component="div" />
 				</Form>
 			</Formik>
-			{errorMessage}
-			{result}
+			{setContent(process, char)}
 		</div>
 	);
 };

@@ -7,8 +7,23 @@ import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import './charList.scss';
 
+const setContent = (process, Component, newItemLoading) => {
+	switch (process) {
+		case 'waiting':
+			return <Spinner />
+		case 'loading':
+			return newItemLoading ? <Component /> : <Spinner />
+		case 'confirmed':
+			return <Component />
+		case 'error':
+			return <ErrorMessage />
+		default:
+			throw Error('Unexpected process state')
+	}
+}
+
 const CharList = ({onCharSelected}) => {
-	const {loading, error, getAllCharacters} = useMarvelService()
+	const {process, setProcess, getAllCharacters} = useMarvelService()
 	const [chars, setChars] = useState([])
 	const [offset, setOffset] = useState(210)
 	const [newItemLoading, setNewItemLoading] = useState(false)
@@ -24,6 +39,7 @@ const CharList = ({onCharSelected}) => {
 		initial ? setNewItemLoading(false) : setNewItemLoading(true)
 		getAllCharacters(offset)
 			.then(onCharListLoaded)
+			.then(() => setProcess('confirmed'))
 	}
 
 	const onCharListLoaded = (newChars) => {
@@ -73,7 +89,7 @@ const CharList = ({onCharSelected}) => {
 							}
 						}}
 					>
-						<img src={thumbnail} alt={name} style={imgStyle}/>
+						<img src={thumbnail} alt={name} style={imgStyle} />
 						<div className="char__name">{name}</div>
 					</li>
 				</CSSTransition>
@@ -89,16 +105,9 @@ const CharList = ({onCharSelected}) => {
 		)
 	}
 
-	const items = renderItems(chars)
-
-	const errorMessage = error ? <ErrorMessage/> : null
-	const spinner = loading && !newItemLoading ? <Spinner/> : null
-
 	return (
 		<div className="char__list">
-			{errorMessage}
-			{spinner}
-			{items}
+			{setContent(process, () => renderItems(chars), newItemLoading)}
 			<button
 				className='button button__main button__long'
 				style={{'display': charEnded ? 'none' : 'block'}}
